@@ -14,3 +14,9 @@ linha
 - Compor os valores de cada conjunto de saída pelo máximo.
 - Determinar o valor de saída pela média ponderada dos máximos.
 - Determinar a velocidade de direção de rotação de cada roda com base no valor de saída. 
+
+## Bibiliotecas Utilizadas
+
+- NumPy
+- Matplotlib
+- Scikit-Fuzzy
