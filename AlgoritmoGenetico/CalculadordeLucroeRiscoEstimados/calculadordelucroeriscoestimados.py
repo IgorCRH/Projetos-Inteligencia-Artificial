@@ -113,4 +113,3 @@ algoritmo(10)
 algoritmo(20)
 algoritmo(25)
 algoritmo(30)
-
