@@ -165,16 +165,15 @@ from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
 from xgboost import XGBRegressor, XGBClassifier
 from sklearn.preprocessing import LabelEncoder
 
-# Selecionar as variáveis relevantes
-features = numerical_data[['Height', 'Whole weight', 'Diameter']]
-target_rings = numerical_data['Rings']
-target_age = numerical_data['Age']
+features = numerical_data[['Height', 'Whole weight', 'Diameter']].astype(float)
+target_rings = numerical_data['Rings'].astype(float)
+target_age = numerical_data['Age'].astype(float)
 
-# Dividir os dados em conjunto de treino e teste
+
 X_train, X_test, y_train_rings, y_test_rings = train_test_split(features, target_rings, test_size=0.3, random_state=42)
 _, _, y_train_age, y_test_age = train_test_split(features, target_age, test_size=0.3, random_state=42)
 
-# Inicializar os modelos
+
 models = {
     'XGBoost': {
         'rings': XGBRegressor(random_state=42),
@@ -190,7 +189,7 @@ models = {
     }
 }
 
-# Função para treinar e avaliar os modelos
+
 def train_and_evaluate(model, X_train, X_test, y_train, y_test):
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
@@ -203,7 +202,7 @@ for model_name, model_dict in models.items():
     accuracy_rings = accuracy_score(y_test_rings.round(), y_rings_pred.round())  # Acurácia para Rings
     print(f"Acurácia para {model_name} (Rings): {accuracy_rings:.4f}")
 
-    # Usar Rings preditos para prever Age
+
     model_age = model_dict['age']
     y_age_pred = train_and_evaluate(model_age, X_train, X_test, y_train_age, y_test_age)
     mse_age = mean_squared_error(y_test_age, y_age_pred)  # MSE para Age
@@ -256,23 +255,17 @@ plt.show()
 
 numerical_data['Age_Class'] = pd.cut(numerical_data['Age'], bins=[0, 7.5, 14.5, float('inf')], labels=['novo', 'adulto', 'velho'])
 
-# Criar histogramas separados para cada classe de idade
 plt.figure(figsize=(10, 6))
 
-# Histograma para idades classificadas como "jovem"
 plt.hist(numerical_data[numerical_data['Age_Class'] == 'novo']['Age'], bins=20, color='blue', alpha=0.7, label='Jovem')
 
-# Histograma para idades classificadas como "adulto"
 plt.hist(numerical_data[numerical_data['Age_Class'] == 'adulto']['Age'], bins=20, color='green', alpha=0.7, label='Adulto')
 
-# Histograma para idades classificadas como "velho"
 plt.hist(numerical_data[numerical_data['Age_Class'] == 'velho']['Age'], bins=20, color='red', alpha=0.7, label='Velho')
 
-# Configurações do gráfico
 plt.xlabel('Idade')
 plt.ylabel('Frequência')
 plt.title('Distribuição das Idades Classificadas')
 plt.legend()
 
-# Exibir o histograma
 plt.show()
